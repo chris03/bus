@@ -1,0 +1,61 @@
+<!doctype html>
+<html ng-app="App">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-sanitize.min.js"></script>
+    <script type="text/javascript" src="//maps.google.com/maps/api/js?v=3&key=AIzaSyBshEbRp3zXfkZW--rNJS94etX9xnLBJsE"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.25/gmaps.min.js"></script>
+  <script src="bus.js?v=4"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div ng-controller="BusController">     
+          <button class="btn btn-info" ng-disaled="loading" ng-click="refresh()">Refresh now!</button> <span ng-hide="loading">Next refresh in {{nextRefresh}} sec.</span><span ng-show="loading">Loading...</span>
+           <table class="table">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>Bus</th>
+                  <th>Bus Number</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="p in allPredictions | filter: isWithinMinutes() | orderBy: 'minutes'">
+                  <td>
+                    {{p.minutes}} min.
+                  </td>
+                  <td>
+                    <span ng-bind-html="p.route"></span> 
+                  </td>
+                  <td>
+                    {{p.vehicle}}
+                  </td>
+                </tr>
+              </tbody>
+            </table> 
+          <!--
+          <button ng-click="showBusOnMap()">Show on map</button>
+          -->
+
+          <div id="map" style="width:100%; height: 300px"></div>
+          
+          
+          <div class="card">  
+             
+            <div class="card-body">
+              <h5 class="card-title">Config</h5>
+              <div class="card-text">
+            <div>Stop Number <span style="margin-right: 10px; cursor: pointer;" ng-repeat="s in presetStopIds" class="badge badge-secondary" ng-click="setStopId(s)">{{s}}</span><input type="number" class="form-control" ng-model="stopId" ng-change="refresh()"/></div>
+            <div>Hidden routes: <input type="text" class="form-control" ng-model="hiddenRouteTags" ng-change="refresh()"/></div>
+            <div>Only show within X minutes<input type="number" class="form-control" ng-model="minutesToShow" ng-change="refresh()"/></div>                
+            </div>
+                  </div>
+      </div>
+          
+          
+  </div>
+  </body>
+</html>
