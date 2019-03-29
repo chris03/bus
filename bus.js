@@ -1,4 +1,18 @@
-angular.module('App', ['ngSanitize']).controller('BusController', ['$scope', '$http', '$interval', '$q', function ($scope, $http, $interval, $q) {
+var app = angular.module('App', ['ngSanitize']);
+
+app.factory('debounce', function ($timeout) {
+  return function (callback, interval) {
+   var timeout = null;
+   return function (args) {
+     $timeout.cancel(timeout);
+     timeout = $timeout(function () {
+       callback.apply(this, args);
+     }, interval);
+    };
+  };
+});
+
+app.controller('BusController', ['$scope', '$http', '$interval', '$q', 'debounce', function ($scope, $http, $interval, $q, $debounce) {
 
   $scope.stopId = 41220;
   $scope.presetStopIds = [41354,41220];
@@ -22,7 +36,7 @@ angular.module('App', ['ngSanitize']).controller('BusController', ['$scope', '$h
     }
   };
 
-  $scope.refresh = function(){
+  $scope.refreshNow = function(){
     $scope.nextRefresh = $scope.refreshInterval;
 
     var busUrl = '/webservicesNextbus?command=predictions&a=stl&stopId=' + $scope.stopId;
@@ -53,14 +67,15 @@ angular.module('App', ['ngSanitize']).controller('BusController', ['$scope', '$h
                   });
                 });
                 }
-
-                $scope.showBusOnMap();
-
                 $scope.loading = false;
               });
+
+              $scope.showBusOnMap();
             });
 
   };
+
+  $scope.refresh = $debounce($scope.refreshNow, 500);
 
   $scope.showBusOnMap = function(){
 
