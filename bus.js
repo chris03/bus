@@ -24,7 +24,7 @@ angular.module('App', ['ngSanitize']).controller('BusController', ['$scope', '$h
   $scope.refresh = function(){
     $scope.nextRefresh = $scope.refreshInterval;
 
-    var busUrl = 'http://webservices.nextbus.com/service/publicJSONFeed?command=predictions&a=stl&stopId=' + $scope.stopId;
+    var busUrl = '/webservicesNextbus?command=predictions&a=stl&stopId=' + $scope.stopId;
             $http({ url: busUrl }).then(function (result) {
               $scope.data = result.data;
               $scope.allPredictions = [];
@@ -66,7 +66,7 @@ angular.module('App', ['ngSanitize']).controller('BusController', ['$scope', '$h
       var predictions = $scope.allPredictions.filter($scope.isWithinMinutes());
       var markers = [];
       var promises = predictions.map(function(p){
-        return $http.get('http://webservices.nextbus.com/service/publicJSONFeed?command=vehicleLocation&a=stl&v='+p.vehicle);
+        return $http.get('/webservicesNextbus?command=vehicleLocation&a=stl&v='+p.vehicle);
       });
 
 
