@@ -7,6 +7,7 @@ angular.module('App', ['ngSanitize']).controller('BusController', ['$scope', '$h
   $scope.refreshInterval = 15;
   $scope.nextRefresh = 0;
   $scope.map = new GMaps({div: '#map'   });
+  $scope.isZoomed = false;
 
 
   $scope.setStopId = function(id){
@@ -81,8 +82,12 @@ angular.module('App', ['ngSanitize']).controller('BusController', ['$scope', '$h
         title: v.data.vehicle.routeTag
         });
       });
-      $scope.map.fitZoom();
-      console.log('Zoom: ', $scope.map.zoom);
+
+      if(!$scope.isZoomed) {
+	$scope.isZoomed = true;
+        $scope.map.fitZoom();
+        console.log('Zoom: ', $scope.map.zoom);
+      }
     });
   };
 
