@@ -149,14 +149,14 @@ app.controller('BusController', ['$scope', '$http', '$interval', '$q', 'debounce
             }
 
             // Extract predictions
-            $scope.allPredictions = route.direction.prediction.map(d => {
+            $scope.allPredictions = $scope.allPredictions.concat(route.direction.prediction.map(d => {
               return {
                 route: route.routeTitle,
                 routeTag: route.routeTag,
                 minutes: parseInt(d.minutes),
                 vehicle: d.vehicle
               };
-            });
+            }));
 
           });
 
