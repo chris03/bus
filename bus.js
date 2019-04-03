@@ -61,10 +61,8 @@ app.controller('BusController', ['$scope', '$http', '$interval', '$q', 'debounce
   }
 
   $scope.isWithinMinutes = function (route) {
-    //return function (route) {
     return route && route.minutes <= $scope.config.minutesToShow;
-    //}
-  };
+  }
 
   $scope.getStopLocationFromPredictions = function (predictions) {
 
@@ -168,7 +166,7 @@ app.controller('BusController', ['$scope', '$http', '$interval', '$q', 'debounce
         });
       }
     });
-  };
+  }
 
   $scope.refresh = $debounce($scope.refreshNow, 1000);
 
